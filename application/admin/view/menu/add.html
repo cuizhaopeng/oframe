@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加菜单项</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="{:url('menu/add')}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+            <input type="text" name="pid" value="1" hidden>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+        </div>
+    </div>
+</form>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    //Demo
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form','index'], function(){
+        var form = layui.form,
+            admin = layui.admin;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            //请求接口
+            admin.req({
+                url: './add'
+                ,data: data.field
+                ,type: 'POST'
+                ,done: function(res){
+                    // layer.msg('注册成功', {
+                    //     offset: '15px'
+                    //     ,icon: 1
+                    //     ,time: 1000
+                    // });
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
