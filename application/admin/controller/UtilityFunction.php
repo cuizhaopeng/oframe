@@ -12,6 +12,7 @@ namespace app\admin\controller;
 use app\admin\model\MhEpisodes;
 use app\admin\model\MhList;
 use app\lib\exception\ErrorMessage;
+use app\lib\exception\SuccessMessage;
 use think\Controller;
 use think\facade\Request;
 use think\File;
@@ -89,7 +90,7 @@ class UtilityFunction extends Controller
             // 上传失败获取错误信息
             echo $file->getError();
         }
-        $this->addEpisodes($_SERVER['DOCUMENT_ROOT'] . $savename,198);
+        $this->addEpisodes($_SERVER['DOCUMENT_ROOT'] . $savename,216);
 
     }
 
@@ -156,5 +157,22 @@ class UtilityFunction extends Controller
     public function wxPay()
     {
 
+    }
+
+    //  图片处理
+    public function image()
+    {
+        // 判断请求的类型
+        if (!Request::isPost()) return $this->fetch();
+
+        //若上传了分集压缩包  接受上传的压缩包
+        $file = Request::file('file');
+
+        // 验证规则以及源文件保存到相关目录
+        $info = $file->validate(['size'=>200*1024*1024,'ext'=>'jpg,png'])->move( './uploads/images');
+        if($info){
+            // 成功上传后 获取上传信息
+            return json(['info'=>Request::root(true).'/uploads/images/'.str_replace("\\","/",$info->getSaveName()),'data'=>'http://baidu.com/']);
+        }
     }
 }

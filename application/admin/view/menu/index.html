@@ -11,12 +11,12 @@
 </head>
 <body>
 
-    <button type="button" class="layui-btn" id="addmenu">
+    <!--<button type="button" class="layui-btn" id="addmenu">
         <i class="layui-icon">&#xe608;</i> 添加
     </button>
     <button type="button" class="layui-btn" id="test">
         <i class="layui-icon">&#xe608;</i> 压缩解压
-    </button>
+    </button>-->
     <button type="button" class="layui-btn" id="test1">
         <i class="layui-icon">&#xe67c;</i>上传图片
     </button>
@@ -29,24 +29,32 @@
             base: '../../../layuiadmin/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
-        }).use(['treeTable','index','layer','code','form','jquery'],function(){
+        }).use(['treeTable','index','layer','code','form','jquery','upload'],function(){
             var o = layui.$,
                 form = layui.form,
                 layer = layui.layer,
                 admin = layui.admin
                 treeTable = layui.treeTable;
-
+            var url = "{:url('admin/UtilityFunction/image')}";
             var upload = layui.upload;
 
             //执行实例
             var uploadInst = upload.render({
                 elem: '#test1' //绑定元素
-                ,url: './upload' //上传接口
+                ,url: url //上传接口
+                ,type: 'POST'
                 ,done: function(res){
                     //上传完毕回调
+                    console.log(res)
+                    layer.msg(res.msg)
                 }
                 ,error: function(){
                     //请求异常回调
+                    layer.msg(res.msg)
+                }
+                ,success: function () {
+                    //上传完毕回调
+                    layer.msg(res.msg)
                 }
             });
             o(document).on('click','#addmenu',function(){
